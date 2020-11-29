@@ -1,0 +1,26 @@
+
+#dropdown .Select-value {
+background-color: #1e243a;
+color: #7999fe;
+}
+
+#dropdown .VirtualizedSelectOption {
+color: #1e243a;
+}
+
+#dropdown .VirtualizedSelectFocusedOption {
+background-color: rgb(244, 246, 246);
+color: #1e243a;
+}
+
+.card{
+    background-color: #1e243a;
+}
+
+.btn {
+    background-color: #1e243a;
+}
+
+#dropdown .Select-control {
+    border: 0px!important;
+}

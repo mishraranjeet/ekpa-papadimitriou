@@ -283,5 +283,10 @@ def vectorization(df247,capital,iefimerida):
 
     frontDf1 = frontDf1.merge(dfcountry,how='inner',left_on=['countrycode'],right_on=['2let'])
 
+    # newsUpdate = pd.read_csv('news.csv')
+    # updated = [newsUpdate, frontDf1]
+    # mergedUpdates = pd.concat(updated).drop_duplicates().reset_index(drop=True)
+    # mergedUpdates.to_csv('news.csv')
+
     return frontDf1
 

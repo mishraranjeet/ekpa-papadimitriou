@@ -38,7 +38,7 @@ xValue = frontDf1['country'].value_counts()
 countriesUnique = frontDf1['country'].unique()
 
 fig2 = px.bar(x=xValue.index, y=yValue, template="plotly_dark")
-fig2.update_layout(yaxis_visible=False, yaxis_showticklabels=False,xaxis_visible=False, xaxis_showticklabels=False,margin=dict(l=0,r=0,b=0,t=0,pad=0),height=300,paper_bgcolor='#2e3859',plot_bgcolor='#2e3859')
+fig2.update_layout(yaxis_visible=False, margin=dict(l=0,r=0,b=0,t=0,pad=0),height=300,paper_bgcolor='#2e3859',plot_bgcolor='#2e3859')
 
 colorscale = ["#deebf7", "#d2e3f3", "#c6dbef", "#b3d2e9", "#9ecae1",
     "#85bcdb", "#6baed6", "#57a0ce", "#4292c6", "#3082be", "#2171b5", "#1361a9",
@@ -83,16 +83,10 @@ SIDEBAR_STYLE = {
     'background-color': '#2e3859'
 }
 
-# the style arguments for the main content page.
 CONTENT_STYLE = {
     'margin-left': '18%',
     'margin-right': '2%',
     'padding': '20px 10p',
-}
-
-TEXT_STYLE = {
-    'textAlign': 'center',
-    'color': '#ffffff'
 }
 
 CARD_TEXT_STYLE = {
@@ -108,7 +102,7 @@ controls = dbc.FormGroup(
         dcc.Dropdown(
             id='dropdown',
             options=[{'label': i, 'value': i} for i in countriesUnique],
-            value='Όλες',  # default value
+            value='Όλες',
             multi=False,
             style={'backgroundColor': '#1e243a'}
         ),
@@ -145,7 +139,7 @@ controls = dbc.FormGroup(
 
 sidebar = html.Div(
     [
-        html.H2('Parameters', style=TEXT_STYLE),
+        html.H2('Parameters', style={'textAlign': 'center','color': '#ffffff'}),
         html.Hr(),
         controls
     ],
@@ -191,7 +185,7 @@ content_second_row = dbc.Row(
 
 content = html.Div(
     [
-        html.H3('News Analysis - Παπαδημητρίου Θεόδωρος', style=TEXT_STYLE),
+        html.H2('News Analysis - Παπαδημητρίου Θεόδωρος', style={'textAlign': 'center','color': '#ffffff','padding-top':'20px'}),
         html.Hr(),
         content_first_row,
         content_second_row,

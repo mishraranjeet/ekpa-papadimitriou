@@ -63,6 +63,7 @@ def crawl247(pages=pages247, agent=agent):
     countries['name'] = countries['name'].str.lower()
     df247['country'] = df247['title'].str.lower()
     df247['country'] = df247['country'].str.replace(r'[^\w\s]*', '').str.strip()
+    countries['name'] = countries['name'].str.replace(r'[^\w\s]*', '').str.strip()
     df247['country'] = df247['country'].astype(str).str.extract(f"({'|'.join(countries['name'])})")
     df247['country'] = df247['country'].replace(np.nan, "ελλάδα", regex=True)
     df247['countrycode'] = df247['country']
@@ -131,6 +132,7 @@ def crawlcapital(pages=pagescap, agent=agent):
     countries['name'] = countries['name'].str.lower()
     capital['country'] = capital['title'].str.lower()
     capital['country'] = capital['country'].str.replace(r'[^\w\s]*', '').str.strip()
+    countries['name'] = countries['name'].str.replace(r'[^\w\s]*', '').str.strip()
     capital['country'] = capital['country'].astype(str).str.extract(f"({'|'.join(countries['name'])})")
     capital['country'] = capital['country'].replace(np.nan, "ελλάδα", regex=True)
     capital['countrycode'] = capital['country']
@@ -194,6 +196,7 @@ def crawliefimerida(pages=pagesiefim):
     countries['name'] = countries['name'].str.lower()
     iefimerida['country'] = iefimerida['title'].str.lower()
     iefimerida['country'] = iefimerida['country'].str.replace(r'[^\w\s]*', '').str.strip()
+    countries['name'] = countries['name'].str.replace(r'[^\w\s]*', '').str.strip()
     iefimerida['country'] = iefimerida['country'].astype(str).str.extract(f"({'|'.join(countries['name'])})")
     iefimerida['country'] = iefimerida['country'].replace(np.nan, "ελλάδα", regex=True)
     iefimerida['countrycode'] = iefimerida['country']
@@ -282,6 +285,7 @@ def vectorization(df247,capital,iefimerida):
     countries['name'] = countries['name'].str.lower()
     frontDf1['country'] = frontDf1['title'].str.lower()
     frontDf1['country'] = frontDf1['country'].str.replace(r'[^\w\s]*', '').str.strip()
+    countries['name'] = countries['name'].str.replace(r'[^\w\s]*', '').str.strip()
     frontDf1['country'] = frontDf1['country'].astype(str).str.extract(f"({'|'.join(countries['name'])})")
     frontDf1['country'] = frontDf1['country'].replace(np.nan, "ελλάδα", regex=True)
     frontDf1['countrycode'] = frontDf1['country']
@@ -293,6 +297,8 @@ def vectorization(df247,capital,iefimerida):
 
     newsUpdate = pd.read_csv('news.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, frontDf1]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
+    frontDf1 = mergedUpdates
     mergedUpdates.to_csv(str(date.today()) + ".csv", index=True)
+    mergedUpdates.to_csv('news.csv', index=True)
 
     return frontDf1

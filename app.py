@@ -29,7 +29,7 @@ agent = {"User-Agent":'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (K
 df247 = crawl247()
 capital = crawlcapital()
 iefimerida = crawliefimerida()
-frontDf1= pd.read_csv("news.csv")
+frontDf1= vectorization(df247,capital,iefimerida)
 
 yValue = frontDf1['3let'].value_counts()
 xValue = frontDf1['country'].value_counts()

@@ -297,8 +297,6 @@ def vectorization(df247,capital,iefimerida):
 
     newsUpdate = pd.read_csv('news.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, frontDf1]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
-    frontDf1 = mergedUpdates
     mergedUpdates.to_csv(str(date.today()) + ".csv", index=True)
-    mergedUpdates.to_csv('news.csv', index=True)
 
     return frontDf1

@@ -1,9 +1,9 @@
 /* Css για το dropdown */
 #dropdown .Select-control {
-    background-color: #1e243a;
+    background-color:  #160d28;
 }
 #dropdown .Select-value {
-background-color: #1e243a;
+background-color: #160d28;
 color: #7999fe;
 }
 
@@ -17,26 +17,72 @@ color: #1e243a;
 }
 
 .card{
-    background-color: #1e243a;
+    background-color: #160d28;
 }
 
 .btn {
-    background-color: #1e243a;
+    background-color: #160d28;
 }
 
 #dropdown .Select-control {
     border: 0px!important;
 }
 
+.DateInput_input {
+    width: 100%;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.DateInput {
+    margin-left: 1%;
+    width: 40%;
+    margin-right: 1%;
+}
+.DateRangePickerInput_arrow {
+    display: inline-block;
+    vertical-align: middle;
+    width: 16%;
+    color: #160d28;
+}
+#date-picker-range{
+    width: 100%;
+}
+.DateRangePickerInput__withBorder {
+    border-radius: 2px;
+    width: 100%;
+    border: 1px solid #dbdbdb;
+}
+.DateRangePicker {
+    width: 100%;
+}
+.CalendarDay__selected, .CalendarDay__selected:active, .CalendarDay__selected:hover {
+    background: #160d28;
+    border: 1px double #160d28;
+    color: #fff;
+}
+.CalendarDay__selected_span {
+    background: #160d28;
+    border: 1px double #160d28;
+    color: #fff;
+}
+
+.DayPickerKeyboardShortcuts_show__bottomRight::before {
+    border-top: 26px solid transparent;
+    border-right: 33px solid #160d28;
+    bottom: 0;
+    right: 0;
+}
 /* Css για το Sidebar */
 #sidebar {
+    z-index: 999;
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
     width: 16%;
     padding: 20px 10px;
-    background-color: #2e3859;
+    background-color: #1a1332;
 }
 
 /* Css του κυρίου μέρους */
@@ -57,7 +103,7 @@ h2{
 }
 
 #firstrow {
-    background-color: #2e3859;
+    background-color:#1a1332;
     padding: 2%;
     min-height:300px;
 }
@@ -69,7 +115,7 @@ h2{
 
 #image_wc {
     width:100%;
-    background-color:#1e243a;
+    background-color:#160d28;
     padding:1%;
 }
 

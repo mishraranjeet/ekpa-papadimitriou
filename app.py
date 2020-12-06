@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import plotly
 import plotly.graph_objs as go
 from crawldash import crawl247, crawlcapital, crawliefimerida, vectorization
-
+from datetime import datetime, date
 import plotly.express as px
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -36,13 +36,10 @@ xValue = frontDf1['country'].value_counts()
 countriesUnique = frontDf1['country'].unique()
 
 fig2 = px.bar(x=xValue.index, y=xValue, template="plotly_dark")
-fig2.update_traces(marker_color='rgb(44, 169, 183)')
-fig2.update_layout(yaxis_visible=False, margin=dict(l=0,r=0,b=0,t=0,pad=0),height=300,paper_bgcolor='#2e3859',plot_bgcolor='#2e3859')
+fig2.update_traces(marker_color='#fc4363')
+fig2.update_layout(yaxis_visible=False, margin=dict(l=0,r=0,b=0,t=0,pad=0),height=300,paper_bgcolor='#1a1332',plot_bgcolor='#1a1332')
 
-colorscale = ["#deebf7", "#d2e3f3", "#c6dbef", "#b3d2e9", "#9ecae1",
-    "#85bcdb", "#6baed6", "#57a0ce", "#4292c6", "#3082be", "#2171b5", "#1361a9",
-    "#08519c", "#0b4083", "#08306b"
-]
+colorscale = ["#f691b4", "#f692b4", "#f36597", "#ee407d", "#ed1966", "#db1562", "#c7125f", "#b40d5b"]
 
 data = dict(
         type = 'choropleth',
@@ -56,8 +53,8 @@ layout = dict(
     geo = dict(
         showframe = False,
         countrycolor = '#1d2339',
-        showocean=True, oceancolor="#2e3859",
-        coastlinecolor='#2e3859',
+        showocean=True, oceancolor="#1a1332",
+        coastlinecolor='#1a1332',
         landcolor = '#7999fe',
         projection = {'type':'mercator'}
 
@@ -66,13 +63,20 @@ layout = dict(
 
 fig = go.Figure(data = [data],layout = layout)
 fig.update_geos(fitbounds="locations")
-fig.update_layout(template="plotly_dark",margin=dict(l=0,r=0,b=0,t=0,pad=0),height=300,coloraxis_showscale=False,paper_bgcolor='#2e3859',plot_bgcolor='#2e3859')
+fig.update_layout(template="plotly_dark",margin=dict(l=0,r=0,b=0,t=0,pad=0),height=300,coloraxis_showscale=False,paper_bgcolor='#1a1332',plot_bgcolor='#1a1332')
 
 app = dash.Dash(__name__,external_stylesheets=[dbc.themes.DARKLY])
 server = app.server
 
 controls = dbc.FormGroup(
     [
+        dcc.DatePickerRange(
+        id="date-picker-range",
+        start_date=datetime(2020, 12, 5),
+        end_date=datetime.now(),
+        min_date_allowed=datetime(2020, 12, 5),
+        max_date_allowed=datetime.now(),
+    ),
         html.P('Επιλογή Χώρας'),
         dcc.Dropdown(
             id='dropdown',
@@ -144,11 +148,11 @@ content_second_row = dbc.Row(
             columns=[{"name": 'Τίτλος', "id": 'title'},
                     {"name": 'Ημερομηνία', "id": 'time'},
                     {"name": 'Χώρα', "id": 'country'}],
-            style_header={'backgroundColor': '#2e3959','font-weight':'bold','text-align':'left','padding':'5px','font-size':'16px'},
-            style_cell={'backgroundColor': '#2e3959','color': 'white','border': '0px'},
+            style_header={'backgroundColor': '#1a1332','font-weight':'bold','text-align':'left','padding':'5px','font-size':'16px'},
+            style_cell={'backgroundColor': '#242438','color': 'white','border': '0px'},
             style_data={'whiteSpace': 'normal','minWidth': '50px', 'width': 'auto', 'maxWidth': '280px','height': 'auto','text-align':'left','padding':'5px'},
             style_data_conditional=[{'if': {'column_id': 'country',},'text-transform': 'capitalize'}],
-            page_size= 10,
+            page_size= 7,
             ),dcc.Interval(id='crawl-interval',interval=60000)]), md=6 ),
         dbc.Col(html.Img(id="image_wc"),md=6)
     ], style={'margin-top': '2%'}
@@ -156,24 +160,21 @@ content_second_row = dbc.Row(
 
 content = html.Div(id="content", children=
     [
-        html.H2('News Analysis - Παπαδημητρίου Θεόδωρος', style={'textAlign': 'center','color': '#ffffff','padding-top':'20px'}),
-        html.Hr(),
+        html.H2('News Analysis - Παπαδημητρίου Θεόδωρος', style={'textAlign': 'center','color': '#ffffff','padding-top':'10px'}),
+        html.Hr(style={'margin':'0'}),
         content_first_row,
         content_second_row,
     ],
 )
 
 app.layout = html.Div([sidebar, content], style={
-        'background-color': '#1e243a'
+        'background-color': '#160d28'
     })
 
 @app.callback(Output('my-final-result', 'data'), Input('crawl-interval', 'n_intervals'), Input('radio_items', 'value'))
 def crawlTest(n, value):
     if value=='value1':
-        temp = pd.read_csv("news.csv")
-        yValue = temp['3let'].value_counts()
-        xValue = temp['country'].value_counts()
-        countriesUnique = temp['country'].unique()
+        temp = pd.read_csv(str(date.today()) + ".csv", index_col=0)
     if value=='value2':
         temp= pd.read_csv("news247.csv")
     if value=='value3':
@@ -197,10 +198,10 @@ def display_image(n):
 def make_image(b):
     d = " ".join(lyr for lyr in frontDf1.title)
     d = re.sub(r'[^\w]', ' ', d)
-    shortword = re.compile(r'\W*\b\w{1,3}\b')
+    shortword = re.compile(r'\W*\b\w{1,5}\b')
     d = shortword.sub('', d)
     d = d.lower()
-    wc = WordCloud(stopwords=greek_stopwords ,background_color='#1e243a', width=480, height=360,color_func=lambda *args, **kwargs: "#2ea7b8", max_words=50).generate(d)
+    wc = WordCloud(stopwords=greek_stopwords ,background_color='#160d28', width=480, height=360, max_words=50).generate(d)
     img = BytesIO()
     plt.figure()
     plt.imshow(wc, interpolation="bilinear")

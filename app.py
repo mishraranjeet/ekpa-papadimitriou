@@ -140,7 +140,7 @@ content_first_row = dbc.Row(
     ]
 )
 
-content_second_row = dbc.Row(
+content_second_row = dbc.Row(id="secondrow-main", children=
     [
         dbc.Col(
             html.Div(id="secondrow", children=[
@@ -155,12 +155,12 @@ content_second_row = dbc.Row(
             page_size= 7,
             ),dcc.Interval(id='crawl-interval',interval=60000)]), md=6 ),
         dbc.Col(html.Img(id="image_wc"),md=6)
-    ], style={'margin-top': '2%'}
+    ]
 )
 
 content = html.Div(id="content", children=
     [
-        html.H2('News Analysis - Παπαδημητρίου Θεόδωρος', style={'textAlign': 'center','color': '#ffffff','padding-top':'10px'}),
+        html.H2('News Analysis - Παπαδημητρίου Θεόδωρος'),
         html.Hr(style={'margin':'0'}),
         content_first_row,
         content_second_row,
@@ -190,7 +190,7 @@ def crawlTest(n, value):
 def display_image(n):    
     imagesurl = frontDf1['image']
     titleurl = frontDf1['title']
-    return html.Img(src=imagesurl[n % imagesurl.size]), html.H4(titleurl[n % titleurl.size], style={'font-size':'16px'})
+    return html.Img(src=imagesurl[n % imagesurl.size]), html.H4(titleurl[n % titleurl.size])
 
 @app.callback(Output('image_wc', 'src'), 
                 [Input('image_wc', 'id')])

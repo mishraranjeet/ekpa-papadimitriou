@@ -19,7 +19,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 
 import nltk
-#nltk.download('stopwords')
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 greek_stopwords = stopwords.words('greek')
 greek_stopwords.append("γιατί")

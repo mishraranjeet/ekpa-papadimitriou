@@ -72,6 +72,7 @@ def crawl247(pages=pages247, agent=agent):
 
     newsUpdate = pd.read_csv('/ekpa-papadimitriou/news247.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, df247]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
+    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False)
     mergedUpdates.to_csv('/ekpa-papadimitriou/news247.csv', index=True)
  
     return df247
@@ -141,6 +142,7 @@ def crawlcapital(pages=pagescap, agent=agent):
 
     newsUpdate = pd.read_csv('/ekpa-papadimitriou/capital.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, capital]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
+    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False)
     mergedUpdates.to_csv('/ekpa-papadimitriou/capital.csv', index=True)
 
     return capital
@@ -205,63 +207,10 @@ def crawliefimerida(pages=pagesiefim):
 
     newsUpdate = pd.read_csv('/ekpa-papadimitriou/iefimerida.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, iefimerida]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
+    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False)
     mergedUpdates.to_csv('/ekpa-papadimitriou/iefimerida.csv', index=True)
 
     return iefimerida
-
-# def crawlbeast(pages=pagesbeast):
-#     for page in pagesbeast:
-#         URL="https://www.newsbeast.gr/" + str(page)
-
-#         req = Request(URL , headers={'User-Agent': 'Mozilla/5.0'})
-
-#         webpage = urlopen(req).read()
-#         soup1 = BeautifulSoup(webpage, "html5lib")
-#         coverpage_news = soup1.find_all('h2', class_='hidden-xs')
-#         coverpage_news_text = soup1.find_all('p', class_='feed-article-excerpt')
-#         ttime = soup1.find_all('div', class_='article-top-meta-time')
-#         date = soup1.find_all('div', class_='article-top-meta-date') 
-
-#         coverpage_news_image = soup1.find_all('img', {'src':re.compile('.jpg')})
-
-#         coverpage_news = [i.text for i in coverpage_news]
-
-#         column_names = ["title", "text", "ttime", "date", "image"]
-
-#         S = pd.DataFrame(list(zip(coverpage_news, coverpage_news_text, ttime, date, coverpage_news_image)), columns =column_names).astype(str)
-#         newsbeast = pd.DataFrame()
-#         newsbeast = newsbeast.append(S)
-
-#     newsbeast = newsbeast.replace(r'\n',' ', regex=True) 
-#     newsbeast = newsbeast.replace(r'\s+', ' ', regex=True)
-#     newsbeast = newsbeast.replace(r"^\['|'\]$","", regex=True)
-#     newsbeast['ttime']=newsbeast['ttime'].str.extract(r'(\d{2}:\d{2})')
-#     newsbeast['date']=newsbeast['date'].str.extract(r'(r\d{2}/\d{2}/\d{4})')
-
-#     newsbeast['title'] = newsbeast['title'].astype(str)
-#     newsbeast['text'] = newsbeast['text'].astype(str)
-#     newsbeast['ttime'] = newsbeast['ttime'].astype(str)
-#     newsbeast['date'] = newsbeast['date'].astype(str)
-
-#     newsbeast['text'] = newsbeast['text'].replace('<p class="feed-article-excerpt hidden-xs">', '', regex=True)
-#     newsbeast['text'] = newsbeast['text'].str.replace(r"[\<\[].*?[\>\]]", "", regex=True)
-#     newsbeast['text'] = newsbeast['text'].replace('</p>', '', regex=True)
-
-#     newsbeast = newsbeast[~newsbeast.ttime.str.contains("nan")]
-#     newsbeast = newsbeast[~newsbeast.date.str.contains("nan")]
-
-#     newsbeast['time'] = newsbeast[['date', 'ttime']].agg(' - '.join, axis=1)
-
-#     newsbeast = newsbeast.drop(['ttime', 'date'], axis=1)
-#     newsbeast = newsbeast.reset_index(drop=True)
-
-#     newsbeast['time']= pd.to_datetime(newsbeast['time'])
-
-#     newsbeast['image']= newsbeast['image'].str.extract(r'(http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)')
-
-#     newsbeast = newsbeast[['title','text','time','image']]
-
-#     return newsbeast
 
 def vectorization(df247,capital,iefimerida):
     dfcountry = pd.read_csv('/ekpa-papadimitriou/countryMap.txt',sep='\t')
@@ -297,6 +246,7 @@ def vectorization(df247,capital,iefimerida):
 
     newsUpdate = pd.read_csv('/ekpa-papadimitriou/news.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, frontDf1]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
+    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False)
     mergedUpdates.to_csv("/ekpa-papadimitriou/" + str(date.today()) + ".csv", index=True)
 
     return frontDf1

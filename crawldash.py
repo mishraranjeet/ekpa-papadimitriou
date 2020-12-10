@@ -13,7 +13,7 @@ import nltk
 from nltk.corpus import stopwords
 greek_stopwords = stopwords.words('greek')
 
-countries = pd.read_csv('countries.csv')
+countries = pd.read_csv('/ekpa-papadimitriou/countries.csv')
 
 
 agent = {"User-Agent": 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'}
@@ -70,9 +70,9 @@ def crawl247(pages=pages247, agent=agent):
     df247['countrycode'] = df247['countrycode'].map(countries.set_index('name')['country'])
     df247['countrycode'] = df247['countrycode'].replace(np.nan, "GR", regex=True)
 
-    newsUpdate = pd.read_csv('news247.csv', index_col=0)
+    newsUpdate = pd.read_csv('/ekpa-papadimitriou/news247.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, df247]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
-    mergedUpdates.to_csv('news247.csv', index=True)
+    mergedUpdates.to_csv('/ekpa-papadimitriou/news247.csv', index=True)
  
     return df247
 
@@ -139,9 +139,9 @@ def crawlcapital(pages=pagescap, agent=agent):
     capital['countrycode'] = capital['countrycode'].map(countries.set_index('name')['country'])
     capital['countrycode'] = capital['countrycode'].replace(np.nan, "GR", regex=True)
 
-    newsUpdate = pd.read_csv('capital.csv', index_col=0)
+    newsUpdate = pd.read_csv('/ekpa-papadimitriou/capital.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, capital]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
-    mergedUpdates.to_csv('capital.csv', index=True)
+    mergedUpdates.to_csv('/ekpa-papadimitriou/capital.csv', index=True)
 
     return capital
 
@@ -203,9 +203,9 @@ def crawliefimerida(pages=pagesiefim):
     iefimerida['countrycode'] = iefimerida['countrycode'].map(countries.set_index('name')['country'])
     iefimerida['countrycode'] = iefimerida['countrycode'].replace(np.nan, "GR", regex=True)
 
-    newsUpdate = pd.read_csv('iefimerida.csv', index_col=0)
+    newsUpdate = pd.read_csv('/ekpa-papadimitriou/iefimerida.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, iefimerida]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
-    mergedUpdates.to_csv('iefimerida.csv', index=True)
+    mergedUpdates.to_csv('/ekpa-papadimitriou/iefimerida.csv', index=True)
 
     return iefimerida
 
@@ -264,7 +264,7 @@ def crawliefimerida(pages=pagesiefim):
 #     return newsbeast
 
 def vectorization(df247,capital,iefimerida):
-    dfcountry = pd.read_csv('countryMap.txt',sep='\t')
+    dfcountry = pd.read_csv('/ekpa-papadimitriou/countryMap.txt',sep='\t')
     frames = [df247, capital, iefimerida]
     merged = pd.concat(frames)
 
@@ -295,8 +295,8 @@ def vectorization(df247,capital,iefimerida):
     frontDf1 = frontDf1.merge(dfcountry,how='inner',left_on=['countrycode'],right_on=['2let'])
     frontDf1.drop(frontDf1.columns.difference(['title','text','time','image','country','3let']), 1, inplace=True)
 
-    newsUpdate = pd.read_csv('news.csv', index_col=0)
+    newsUpdate = pd.read_csv('/ekpa-papadimitriou/news.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, frontDf1]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
-    mergedUpdates.to_csv(str(date.today()) + ".csv", index=True)
+    mergedUpdates.to_csv("/ekpa-papadimitriou/" + str(date.today()) + ".csv", index=True)
 
     return frontDf1

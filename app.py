@@ -19,7 +19,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 
 import nltk
-nltk.download('stopwords')
+#nltk.download('stopwords')
 from nltk.corpus import stopwords
 greek_stopwords = stopwords.words('greek')
 greek_stopwords.append("γιατί")
@@ -176,11 +176,11 @@ def crawlTest(n, value):
     if value=='value1':
         temp = pd.read_csv(str(date.today()) + ".csv", index_col=0)
     if value=='value2':
-        temp= pd.read_csv("news247.csv")
+        temp= pd.read_csv("/ekpa-papadimitriou/news247.csv")
     if value=='value3':
-        temp= pd.read_csv("capital.csv")
+        temp= pd.read_csv("/ekpa-papadimitriou/capital.csv")
     if value=='value4':
-        temp= pd.read_csv("iefimerida.csv")
+        temp= pd.read_csv("/ekpa-papadimitriou/iefimerida.csv")
 
     return temp.to_dict('records_final')
 

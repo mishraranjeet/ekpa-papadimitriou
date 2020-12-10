@@ -176,11 +176,11 @@ def crawlTest(n, value):
     if value=='value1':
         temp = pd.read_csv(str(date.today()) + ".csv", index_col=0)
     if value=='value2':
-        temp= pd.read_csv("/news247.csv")
+        temp= pd.read_csv("news247.csv")
     if value=='value3':
-        temp= pd.read_csv("/capital.csv")
+        temp= pd.read_csv("capital.csv")
     if value=='value4':
-        temp= pd.read_csv("/iefimerida.csv")
+        temp= pd.read_csv("iefimerida.csv")
 
     return temp.to_dict('records_final')
 

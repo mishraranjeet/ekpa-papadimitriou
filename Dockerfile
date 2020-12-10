@@ -10,4 +10,4 @@ RUN python -m nltk.downloader stopwords
 COPY . ./
 EXPOSE 8050
 
-CMD [ "gunicorn", "--workers=5", "--threads=1", "-b 0.0.0.0:8000", "app:server"]
+CMD [ "gunicorn", "--workers=5", "--threads=1", "-b 0.0.0.0:8000", "app:server"]h

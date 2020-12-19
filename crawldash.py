@@ -24,6 +24,7 @@ pagesiefim = ('politiki','ellada','oikonomia','kosmos')
 pagesbeast = ('politiki','greece','financial','world')
 
 def crawl247(pages=pages247, agent=agent):
+    print("crawling news247...")
     for page in pages247:
         URL="https://www.news247.gr/" + str(page)
 
@@ -79,6 +80,7 @@ def crawl247(pages=pages247, agent=agent):
     return df247
 
 def crawlcapital(pages=pagescap, agent=agent):
+    print("crawling capital...")
     for page in pagescap:
         URL="https://www.capital.gr/" + str(page)
 
@@ -150,6 +152,7 @@ def crawlcapital(pages=pagescap, agent=agent):
     return capital
 
 def crawliefimerida(pages=pagesiefim):
+    print("crawling iefimerida...")
     for page in pagesiefim:
         URL="https://www.iefimerida.gr/" + str(page)
         
@@ -216,6 +219,7 @@ def crawliefimerida(pages=pagesiefim):
     return iefimerida
 
 def vectorization(df247,capital,iefimerida):
+    print("vectorization in progress")
     dfcountry = pd.read_csv('countryMap.txt',sep='\t')
     frames = [df247, capital, iefimerida]
     merged = pd.concat(frames)

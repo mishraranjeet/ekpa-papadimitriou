@@ -18,6 +18,8 @@ color: #1e243a;
 
 .card{
     background-color: #160d28;
+    padding: 5%;
+    margin-bottom: 4%;
 }
 
 .btn {
@@ -86,6 +88,9 @@ color: #1e243a;
 }
 
 /* Css του κυρίου μέρους */
+html {
+    background-color: #160d28;
+}
 #content {
     margin-left: 18%;
     margin-right: 2%;
@@ -109,7 +114,8 @@ h4{
 #firstrow {
     background-color:#1a1332;
     padding: 2%;
-    min-height:300px;
+    min-height:350px;
+    max-height:350px;
 }
 #secondrow-main{
     margin-top: 2%;
@@ -128,6 +134,26 @@ h4{
 #image img {
     width:100%;
     margin-bottom:2%;
+}
+
+#countcards {
+    text-align: center;
+    max-height: 350px;
+}
+#card247 {
+    height: 30%;
+    background-image: linear-gradient(to right, #28bfc9 , #1e243a);
+}
+#cardcapital{
+    height: 30%;
+    background-image: linear-gradient(to right, #e17b65 , #1e243a);
+}
+#cardiefimerida{
+    height: 30%;
+    background-image: linear-gradient(to right, #fdb508 , #1e243a);
+}
+.row {
+    display:-webkit-box!important;
 }
 
 @media (max-width:991px) {

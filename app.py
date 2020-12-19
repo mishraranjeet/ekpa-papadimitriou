@@ -37,7 +37,7 @@ countriesUnique = frontDf1['country'].unique()
 
 fig2 = px.bar(x=xValue.index, y=xValue, template="plotly_dark")
 fig2.update_traces(marker_color='#fc4363')
-fig2.update_layout(yaxis_visible=False, margin=dict(l=0,r=0,b=0,t=0,pad=0),height=300,paper_bgcolor='#1a1332',plot_bgcolor='#1a1332')
+fig2.update_layout(yaxis_visible=False, margin=dict(l=0,r=0,b=0,t=0,pad=0),height=350,paper_bgcolor='#1a1332',plot_bgcolor='#1a1332')
 
 colorscale = ["#f691b4", "#f692b4", "#f36597", "#ee407d", "#ed1966", "#db1562", "#c7125f", "#b40d5b"]
 
@@ -63,7 +63,7 @@ layout = dict(
 
 fig = go.Figure(data = [data],layout = layout)
 fig.update_geos(fitbounds="locations")
-fig.update_layout(template="plotly_dark",margin=dict(l=0,r=0,b=0,t=0,pad=0),height=300,coloraxis_showscale=False,paper_bgcolor='#1a1332',plot_bgcolor='#1a1332')
+fig.update_layout(template="plotly_dark",margin=dict(l=0,r=0,b=0,t=0,pad=0),height=350,coloraxis_showscale=False,paper_bgcolor='#1a1332',plot_bgcolor='#1a1332')
 
 app = dash.Dash(__name__,external_stylesheets=[dbc.themes.DARKLY],meta_tags=[
         {"name": "viewport", "content": "width=device-width, initial-scale=1"}
@@ -155,9 +155,12 @@ content_second_row = dbc.Row(id="secondrow-main", children=
             style_cell={'backgroundColor': '#242438','color': 'white','border': '0px'},
             style_data={'whiteSpace': 'normal','minWidth': '50px', 'width': 'auto', 'maxWidth': '280px','height': 'auto','text-align':'left','padding':'5px'},
             style_data_conditional=[{'if': {'column_id': 'country',},'text-transform': 'capitalize'}],
-            page_size= 7,
-            ),dcc.Interval(id='crawl-interval',interval=60000)]), width=6, xs=12, md=4),
-        dbc.Col(html.Img(id="image_wc"),width=6, xs=12, md=4)
+            page_size= 5,
+            ),dcc.Interval(id='crawl-interval',interval=60000)]), width=4, xs=12, md=4),
+        dbc.Col(html.Img(id="image_wc"),width=4, xs=12, md=4),
+        dbc.Col(id="countcards", children=[dbc.Card(id="card247", children=[html.H4('News247 Scraped'), html.H3(len(df247))]),
+                                           dbc.Card(id="cardcapital", children=[html.H4('Capital Scraped'), html.H3(len(capital))]),
+                                           dbc.Card(id="cardiefimerida", children=[html.H4('iefimerida Scraped'), html.H3(len(iefimerida))])],width=4, xs=12, md=4),
     ]
 )
 
@@ -169,7 +172,7 @@ content = html.Div(id="content", children=
 )
 
 app.layout = html.Div(children=[
-         html.H2('News Analysis - Παπαδημητρίου Θεόδωρος'),
+         html.H2('News Analysis - Παπαδημητρίου Θεόδωρος',style={'padding':'2%'}),
         html.Hr(style={'margin':'0'}),
         sidebar, content], style={
         'background-color': '#160d28'
@@ -205,7 +208,7 @@ def make_image(b):
     shortword = re.compile(r'\W*\b\w{1,5}\b')
     d = shortword.sub('', d)
     d = d.lower()
-    wc = WordCloud(stopwords=greek_stopwords ,background_color='#160d28', width=480, height=360, max_words=50).generate(d)
+    wc = WordCloud(stopwords=greek_stopwords ,background_color='#160d28', height=350, max_words=50).generate(d)
     img = BytesIO()
     plt.figure()
     plt.imshow(wc, interpolation="bilinear")

@@ -65,7 +65,10 @@ fig = go.Figure(data = [data],layout = layout)
 fig.update_geos(fitbounds="locations")
 fig.update_layout(template="plotly_dark",margin=dict(l=0,r=0,b=0,t=0,pad=0),height=300,coloraxis_showscale=False,paper_bgcolor='#1a1332',plot_bgcolor='#1a1332')
 
-app = dash.Dash(__name__,external_stylesheets=[dbc.themes.DARKLY])
+app = dash.Dash(__name__,external_stylesheets=[dbc.themes.DARKLY],meta_tags=[
+        {"name": "viewport", "content": "width=device-width, initial-scale=1"}
+    ])
+
 server = app.server
 
 controls = dbc.FormGroup(
@@ -130,12 +133,12 @@ content_first_row = dbc.Row(
                         html.Div(id="image"),
                         dcc.Interval(id='interval', interval=3000)
                     ])
-                ])        ]), md=4, xs=12),
+                ])        ]), width=4, xs=12, md=4),
         dbc.Col(
-            dcc.Graph(id='graph2', figure=fig2), md=4, xs=12
+            dcc.Graph(id='graph2', figure=fig2), width=4, xs=12, md=4
         ),
         dbc.Col(
-            dcc.Graph(id='graph3',figure=fig), md=4, xs=12
+            dcc.Graph(id='graph3',figure=fig), width=4, xs=12, md=4
         )
     ]
 )
@@ -153,21 +156,22 @@ content_second_row = dbc.Row(id="secondrow-main", children=
             style_data={'whiteSpace': 'normal','minWidth': '50px', 'width': 'auto', 'maxWidth': '280px','height': 'auto','text-align':'left','padding':'5px'},
             style_data_conditional=[{'if': {'column_id': 'country',},'text-transform': 'capitalize'}],
             page_size= 7,
-            ),dcc.Interval(id='crawl-interval',interval=60000)]), md=6, xs=12),
-        dbc.Col(html.Img(id="image_wc"),md=6, xs=12)
+            ),dcc.Interval(id='crawl-interval',interval=60000)]), width=6, xs=12, md=4),
+        dbc.Col(html.Img(id="image_wc"),width=6, xs=12, md=4)
     ]
 )
 
 content = html.Div(id="content", children=
     [
-        html.H2('News Analysis - Παπαδημητρίου Θεόδωρος'),
-        html.Hr(style={'margin':'0'}),
         content_first_row,
         content_second_row,
     ],
 )
 
-app.layout = html.Div([sidebar, content], style={
+app.layout = html.Div(children=[
+         html.H2('News Analysis - Παπαδημητρίου Θεόδωρος'),
+        html.Hr(style={'margin':'0'}),
+        sidebar, content], style={
         'background-color': '#160d28'
     })
 

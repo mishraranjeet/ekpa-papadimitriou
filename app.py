@@ -130,12 +130,12 @@ content_first_row = dbc.Row(
                         html.Div(id="image"),
                         dcc.Interval(id='interval', interval=3000)
                     ])
-                ])        ]), md=4),
+                ])        ]), md=4 xs=12),
         dbc.Col(
-            dcc.Graph(id='graph2', figure=fig2), md=4
+            dcc.Graph(id='graph2', figure=fig2), md=4 xs=12
         ),
         dbc.Col(
-            dcc.Graph(id='graph3',figure=fig), md=4
+            dcc.Graph(id='graph3',figure=fig), md=4 xs=12
         )
     ]
 )
@@ -153,8 +153,8 @@ content_second_row = dbc.Row(id="secondrow-main", children=
             style_data={'whiteSpace': 'normal','minWidth': '50px', 'width': 'auto', 'maxWidth': '280px','height': 'auto','text-align':'left','padding':'5px'},
             style_data_conditional=[{'if': {'column_id': 'country',},'text-transform': 'capitalize'}],
             page_size= 7,
-            ),dcc.Interval(id='crawl-interval',interval=60000)]), md=6 ),
-        dbc.Col(html.Img(id="image_wc"),md=6)
+            ),dcc.Interval(id='crawl-interval',interval=60000)]), md=6 xs=12),
+        dbc.Col(html.Img(id="image_wc"),md=6 xs=12)
     ]
 )
 

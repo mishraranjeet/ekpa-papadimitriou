@@ -24,6 +24,7 @@ pagesiefim = ('politiki','ellada','oikonomia','kosmos')
 pagesbeast = ('politiki','greece','financial','world')
 
 def crawl247(pages=pages247, agent=agent):
+    df247 = pd.DataFrame()
     print("crawling news247...")
     for page in pages247:
         URL="https://www.news247.gr/" + str(page)
@@ -41,7 +42,7 @@ def crawl247(pages=pages247, agent=agent):
         column_names = ["title", "text", "time", "image"]
 
         S = pd.DataFrame(list(zip(coverpage_news, coverpage_news_text, coverpage_news_time, coverpage_news_image)), columns =column_names).astype(str)
-        df247 = pd.DataFrame()
+        
         df247 = df247.append(S)
 
     df247 = df247.replace(r'\n',' ', regex=True) 
@@ -74,13 +75,14 @@ def crawl247(pages=pages247, agent=agent):
     newsUpdate = pd.read_csv('news247.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, df247]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
     mergedUpdates['time']= pd.to_datetime(mergedUpdates['time'])
-    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False)
+    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False).reset_index(drop=True)
     mergedUpdates.to_csv('news247.csv', index=True)
  
     return df247
 
 def crawlcapital(pages=pagescap, agent=agent):
     print("crawling capital...")
+    capital = pd.DataFrame()
     for page in pagescap:
         URL="https://www.capital.gr/" + str(page)
 
@@ -92,14 +94,14 @@ def crawlcapital(pages=pagescap, agent=agent):
         untime = soup1.find_all('span', class_='time')
         date = soup1.find_all('span', class_='date') 
 
-        coverpage_news_image = soup1.find_all('img', {'src':re.compile('.jpg')})
+        coverpage_news_image = soup1.find_all('div', class_='image__wrapper')
 
         coverpage_news = [i.text for i in coverpage_news]
 
         column_names = ["title", "text", "ttime", "date", "image"]
 
         S = pd.DataFrame(list(zip(coverpage_news, coverpage_news_text, untime, date, coverpage_news_image)), columns =column_names).astype(str)
-        capital = pd.DataFrame()
+        
         capital = capital.append(S)
 
     capital = capital.replace(r'\n',' ', regex=True) 
@@ -146,13 +148,14 @@ def crawlcapital(pages=pagescap, agent=agent):
     newsUpdate = pd.read_csv('capital.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, capital]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
     mergedUpdates['time']= pd.to_datetime(mergedUpdates['time'])
-    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False)
+    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False).reset_index(drop=True)
     mergedUpdates.to_csv('capital.csv', index=True)
 
     return capital
 
 def crawliefimerida(pages=pagesiefim):
     print("crawling iefimerida...")
+    iefimerida = pd.DataFrame()
     for page in pagesiefim:
         URL="https://www.iefimerida.gr/" + str(page)
         
@@ -165,14 +168,14 @@ def crawliefimerida(pages=pagesiefim):
         coverpage_news_text = page_soup.find_all('div', class_='field-summary')
         time = page_soup.find_all('span', class_='created')
 
-        coverpage_news_image = page_soup.find_all('picture', class_='lazy horizontal_rectangle')
+        coverpage_news_image = page_soup.find_all('div', class_='image-wrapper')
 
         coverpage_news = [i.text for i in coverpage_news]
 
         column_names = ["title", "text", "time", "image"]
 
         S = pd.DataFrame(list(zip(coverpage_news, coverpage_news_text, time, coverpage_news_image)), columns =column_names).astype(str)
-        iefimerida = pd.DataFrame()
+        
         iefimerida = iefimerida.append(S)
 
     iefimerida = iefimerida.replace(r'\n',' ', regex=True) 
@@ -196,7 +199,10 @@ def crawliefimerida(pages=pagesiefim):
     iefimerida = iefimerida.drop([iefimerida.index[0]])
     iefimerida = iefimerida.reset_index(drop=True)
 
-    iefimerida['image']= iefimerida['image'].str.extract(r'(http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)')
+    iefimerida['image']= iefimerida['image'].str.extract(r'src=([^>]+)\"')
+    iefimerida['image'] = iefimerida['image'].str.replace('"', '')
+    iefimerida['image'] = iefimerida['image'].str.replace(r'\?.*', '', regex=True)
+    iefimerida['image'] = 'www.iefimerida.gr' + iefimerida['image'].astype(str)
 
     iefimerida = iefimerida[['title','text','time','image']]
 
@@ -213,7 +219,7 @@ def crawliefimerida(pages=pagesiefim):
     newsUpdate = pd.read_csv('iefimerida.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, iefimerida]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
     mergedUpdates['time']= pd.to_datetime(mergedUpdates['time'])
-    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False)
+    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False).reset_index(drop=True)
     mergedUpdates.to_csv('iefimerida.csv', index=True)
 
     return iefimerida
@@ -233,20 +239,19 @@ def vectorization(df247,capital,iefimerida):
     similar_titles = pd.DataFrame(index=arr2.columns,columns=range(1,7))
     for i in range(0,len(arr2.columns)): 
         similar_titles.iloc[i,:6] = arr2.iloc[0:,i].sort_values(ascending=False)[:6].index
+         
+    similar_titles = arr2.iloc[0:,i].sort_values(ascending=False)[:20]
         
-    frontDf = similar_titles.head(20).iloc[:20,0:1]
-    
-    frontDf1 = frontDf.merge(merged, on='title', how='left')
+    frontDf = similar_titles.to_frame()
 
-    countries['name'] = countries['name'].str.lower()
-    frontDf1['country'] = frontDf1['title'].str.lower()
-    frontDf1['country'] = frontDf1['country'].str.replace(r'[^\w\s]*', '').str.strip()
-    countries['name'] = countries['name'].str.replace(r'[^\w\s]*', '').str.strip()
-    frontDf1['country'] = frontDf1['country'].astype(str).str.extract(f"({'|'.join(countries['name'])})")
-    frontDf1['country'] = frontDf1['country'].replace(np.nan, "ελλάδα", regex=True)
-    frontDf1['countrycode'] = frontDf1['country']
-    frontDf1['countrycode'] = frontDf1['countrycode'].map(countries.set_index('name')['country'])
-    frontDf1['countrycode'] = frontDf1['countrycode'].replace(np.nan, "GR", regex=True)
+    frontDf['title1'] = frontDf.index
+
+    frontDf.drop(frontDf.columns[-2], axis=1, inplace=True)
+
+    frontDf1 = frontDf.merge(merged, on='title', how='outer')
+
+    frontDf1 = frontDf1.dropna(subset=['title1'])
+    frontDf1=frontDf1.drop_duplicates(subset ="title")
 
     frontDf1 = frontDf1.merge(dfcountry,how='inner',left_on=['countrycode'],right_on=['2let'])
     frontDf1.drop(frontDf1.columns.difference(['title','text','time','image','country','3let']), 1, inplace=True)
@@ -254,7 +259,7 @@ def vectorization(df247,capital,iefimerida):
     newsUpdate = pd.read_csv('news.csv', index_col=0)
     mergedUpdates = (pd.concat([newsUpdate, frontDf1]).drop_duplicates(subset=['title'], keep='last')).reset_index(drop=True)
     mergedUpdates['time']= pd.to_datetime(mergedUpdates['time'])
-    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False)
+    mergedUpdates = mergedUpdates.sort_values(by='time', ascending=False).reset_index(drop=True)
     mergedUpdates.to_csv("" + str(date.today()) + ".csv", index=True)
 
     return frontDf1

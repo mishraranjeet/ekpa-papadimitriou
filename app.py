@@ -181,7 +181,7 @@ app.layout = html.Div(children=[
 @app.callback(Output('my-final-result', 'data'), Input('crawl-interval', 'n_intervals'), Input('radio_items', 'value'))
 def crawlTest(n, value):
     if value=='value1':
-        temp = pd.read_csv(str(date.today()) + ".csv", index_col=0)
+        temp = vectorization(df247,capital,iefimerida)
     if value=='value2':
         temp= pd.read_csv("news247.csv")
     if value=='value3':
@@ -189,7 +189,7 @@ def crawlTest(n, value):
     if value=='value4':
         temp= pd.read_csv("iefimerida.csv")
 
-    return temp.to_dict('records_final')
+    return temp.to_dict('records')
 
 @app.callback(Output('image', 'children'),
               [Input('interval', 'n_intervals')])

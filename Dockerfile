@@ -8,6 +8,6 @@ RUN pip3 install -r /requirements.txt
 RUN python -m nltk.downloader stopwords
 
 COPY . ./
-EXPOSE 8050
+EXPOSE 8000
 
 CMD [ "gunicorn", "--workers=5", "--threads=1", "-b 0.0.0.0:8000", "app:server"]h

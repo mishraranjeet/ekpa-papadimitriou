@@ -101,6 +101,10 @@ app = dash.Dash(
 
 server = app.server
 
+@server.route('/')
+def route1():
+    return jsonify({'message':'this is the first route'})
+
 controls = dbc.FormGroup(
     [
         dcc.DatePickerSingle(

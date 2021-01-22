@@ -1,7 +1,7 @@
 import psycopg2
 import pandas as pd 
 
-
+DB_CON_STRING="postgres://postgres:helloworld1!@18.220.76.242:5432/newscrawl"
 def connect_to_db():
   db_connection = psycopg2.connect(
     host="18.220.76.242",
@@ -19,12 +19,12 @@ def connect_to_db():
 conn,db=connect_to_db()
 def create_table():
   try:
-    table_creation=["""
+    table_creation="""
                     CREATE TABLE newscrawler (
                     id serial PRIMARY KEY,
                     title VARCHAR ( 500 ) ,
                     newstext VARCHAR ( 2000 ) ,
-                    newstime VARCHAR ( 500 ) ,
+                    newstime TIMESTAMP ,
                     newsource VARCHAR ( 500 ) ,
                     imagelink VARCHAR ( 500 ) ,
                     country VARCHAR ( 500 ) ,
@@ -33,53 +33,23 @@ def create_table():
                     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
                     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
                   );
-                ""","""
-                    CREATE TABLE  capitalcrawler (
-                    id serial PRIMARY KEY,
-                    title VARCHAR ( 500 ) ,
-                    newstext VARCHAR ( 2000 ) ,
-                    newstime VARCHAR ( 500 ) ,
-                    newsource VARCHAR ( 500 ) ,
-                    imagelink VARCHAR ( 500 ) ,
-                    country VARCHAR ( 500 ) ,
-                    countrycode VARCHAR ( 500 ) ,
-                    newslet VARCHAR ( 500 ) ,
-                    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-                    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
-                  );
-                """,
                 """
-                  CREATE TABLE  iefimeridacrawler (
-                    id serial PRIMARY KEY,
-                    title VARCHAR ( 500 ) ,
-                    newstext VARCHAR ( 2000 ) ,
-                    newstime VARCHAR ( 500 ) ,
-                    newsource VARCHAR ( 500 ) ,
-                    imagelink VARCHAR ( 500 ) ,
-                    country VARCHAR ( 500 ) ,
-                    countrycode VARCHAR ( 500 ) ,
-                    newslet VARCHAR ( 500 ) ,
-                    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-                    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
-                  );
-                """]
 
-    for table in table_creation:
-      db.execute(table)
+    db.execute(table_creation)
     db.close()
     return True   
   except Exception as e :
     print("error:",e)
     return False
   
-def insert_to_db(table,new_source,data=None):
+def insert_to_db(new_source,data=None):
   if data is None:
     data=[]
   try:
     record_to_insert=[]
     if len(data)>0:
       for d in data:
-        checkrecord=record_exists(table,d['title'])
+        checkrecord=record_exists(d['title'])
         print("checkrecord:",checkrecord)
         if not checkrecord:
           title=str(d['title']).replace("'","''") if 'title' in d else None
@@ -93,7 +63,7 @@ def insert_to_db(table,new_source,data=None):
           db_data=(title,newstext,newstime,newsource,imagelink,country,countrycode,newslet)
           record_to_insert.append(db_data)
 
-    db_insert_query = """ INSERT INTO {tablename} (title, newstext, newstime,newsource,imagelink,country,countrycode,newslet) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""".format(tablename=table)
+    db_insert_query = """ INSERT INTO newscrawler (title, newstext, newstime,newsource,imagelink,country,countrycode,newslet) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
     for record in record_to_insert :
       db.execute(db_insert_query, record)
       conn.commit()
@@ -104,9 +74,9 @@ def insert_to_db(table,new_source,data=None):
     return False
 
 
-def record_exists(table,title):
+def record_exists(title):
   title=str(title).replace("'","''")
-  query="""SELECT id FROM {table} WHERE title = '{title}'""".format(table=table,title=title)
+  query="""SELECT id FROM newscrawler WHERE title = '{title}'""".format(title=title)
   db.execute(query)
   return db.fetchone() is not None
 
@@ -116,4 +86,4 @@ if __name__ == '__main__':
   # print(create_table())
   df = pd.read_csv("news.csv") 
   data=df.to_dict(orient='records')
-  print(insert_to_db('newscrawler','news247',data))
+  print(insert_to_db('news247',data))

@@ -7,6 +7,7 @@ ADD . /ekpa-papadimitriou
 COPY requirements.txt /
 RUN pip3 install -r requirements.txt
 RUN python -m nltk.downloader stopwords
+RUN chmod 777 ./run.sh
 
 EXPOSE 8000
 CMD ["./run.sh"]

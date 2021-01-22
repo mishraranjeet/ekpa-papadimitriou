@@ -1,5 +1,14 @@
 version: "3.8"
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d:rw
+      - ./config/logs:/var/log/nginx:rw
   ekpa-papadimitriou:
     container_name: ekpa-papadimitriou
     build:

@@ -1,7 +1,6 @@
 import psycopg2
 import pandas as pd 
 
-DB_CON_STRING="postgres://postgres:helloworld1!@18.220.76.242:5432/newscrawl"
 def connect_to_db():
   db_connection = psycopg2.connect(
     host="18.220.76.242",

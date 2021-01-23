@@ -24,7 +24,7 @@ def run_scrapper():
     insert_to_db('news247',df247)
     insert_to_db('capital',capital)
     insert_to_db('iefimerida',iefimerida)
-    return jsonify({'success':True})
+    return jsonify({'success':True,'data_saved_time':datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d %H:%M:%S')})
   except Exception as e:
     print("error on saving data: ",e)
     return jsonify({'success':False})
